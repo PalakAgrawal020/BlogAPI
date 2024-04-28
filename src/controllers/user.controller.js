@@ -1,34 +1,37 @@
 import { User } from "../models/user.model.js";
 
 export const createUser = async (req, res) => {
-    const { username, email, password } = req.body
-
-    const existedUser = await User.findOne({
-        $or: [{username}, {email}]
-    })
-
-    if (existedUser) {
-        res.status(500).json({error : 'user already exists'})
+    try {
+        const { username, email, password } = req.body
+    
+        const existedUser = await User.findOne({
+            $or: [{username}, {email}]
+        })
+    
+        if (existedUser) {
+            res.status(500).json({error : 'user already exists'})
+        }
+    
+        const user = await User.create({
+            username,
+            email,
+            password,
+        })
+    
+        const createdUser = await User.findById(user._id).select(
+            "-password"
+        )
+    
+        if (!createdUser) {
+            res.status(500).json({error : 'something went wrong while registering the user'})
+        }
+    
+        return res.status(201).json(
+            {user: createdUser}
+        )
+    } catch (error) {
+        console.log(error);
     }
-
-    const user = await User.create({
-        username,
-        email,
-        password,
-    })
-
-    const createdUser = await User.findById(user._id).select(
-        "-password"
-    )
-
-    if (!createdUser) {
-        res.status(500).json({error : 'something went wrong while registering the user'})
-    }
-
-    return res.status(201).json(
-        {user: createdUser}
-    )
-
 }
 
 

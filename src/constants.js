@@ -1,1 +1,1 @@
-export const DB_NAME = "BlogApi"
+export const DB_NAME = "BLOGAPI"

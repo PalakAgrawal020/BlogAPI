@@ -47,10 +47,10 @@ export const loginUser = async (req, res) => {
         return res.status(400).json({error : "user does not exist"})
     }
 
-    // const isPasswordValid = await user.isPasswordCorrect(password)
-    // if (!isPasswordValid) {
-    //     return res.status(400).json({error : "Invalid user credentials"})
-    // }
+    const isPasswordValid = await user.isPasswordCorrect(password)
+    if (!isPasswordValid) {
+        return res.status(400).json({error : "Invalid user credentials"})
+    }
 
     const loggedInUser = await User.findById(user._id).select("-password")
 

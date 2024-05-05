@@ -53,6 +53,13 @@ export const getOnePost = async (req, res) => {
 
 export const deletePost = async (req, res) => {
     const { id } = req.params;
+    const loggedInUser = req.user;
+    const post = await Post.findById(id);
+    
+    if (loggedInUser._id !== post.author) {
+        return res.status(401).json({ error: 'unauthorized request' });
+    }
+
     const deletePost = await Post.findByIdAndDelete(id);
 
     if (!deletePost) {

@@ -1,5 +1,17 @@
 import { User } from "../models/user.model.js";
 
+const generateUserAccessToken = async (userId) => {
+    try {
+        const user = await User.findById(userId);
+        const accessToken = user.generateAccessToken();
+    
+        return accessToken
+    } catch (error) {
+        console.log(error);
+        return
+    }
+}
+
 export const registerUser = async (req, res) => {
     const { username, email, password } = req.body
     
@@ -29,7 +41,14 @@ export const registerUser = async (req, res) => {
         return res.status(400).json({error: "something went wrong while registering the user"})
     }
 
-    return res.status(200).json(createdUser)
+    const accessToken = await generateUserAccessToken(createdUser._id);
+
+    return res.status(200).json({
+        _id: createdUser._id,
+        username: createdUser.username,
+        email: createdUser.email,
+        accessToken
+    })
 }
 
 export const loginUser = async (req, res) => {
@@ -54,7 +73,14 @@ export const loginUser = async (req, res) => {
 
     const loggedInUser = await User.findById(user._id).select("-password")
 
-    return res.status(200).json(loggedInUser)
+    const accessToken = await generateUserAccessToken(loggedInUser._id);
+
+    return res.status(200).json({
+        _id: loggedInUser._id,
+        username: loggedInUser.username,
+        email: loggedInUser.email,
+        accessToken
+    })
 }
 
 

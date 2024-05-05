@@ -34,3 +34,23 @@ export const createComment = async (req, res) => {
         res.status(500).json({error : 'something went wrong'})
     }
 }
+
+export const getAllComments = async (req, res) => {
+    try {
+        const comments = await Comment.find();
+        return res.status(200).json(comments)
+    } catch (error) {
+        return res.status(400).json({error : "Error fetching all comments"})
+    }
+}
+
+export const deleteComment = async (req, res) => {
+    // const { id } = req.params;
+    // const deletedComment = await Comment.findByIdAndDelete(id);
+
+    // if (!deletedComment) {
+    //     res.status(400).json({ error: 'comment not found' });
+    // }
+
+    // res.status(200).json({message : "comment deleted successfully"})
+}

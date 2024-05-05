@@ -32,3 +32,25 @@ export const createPost = async (req, res) => {
         res.status(500).json({error : error});
     }
 }
+
+export const getAllPosts = async (req, res) => {
+    const allPosts = await Post.find();
+    if (!allPosts) {
+        res.status(400).json({ error: " error fetching all posts " });
+    }
+    res.status(200).json(allPosts);
+}
+
+export const getOnePost = async (req, res) => {
+    const { id } = req.params;
+    const getPost = await Post.findById(id);
+    if (!getPost) {
+        res.status(400).json({error : "Error fetching the post"})
+    } else {
+        res.status(200).json(getPost);
+    }
+}
+
+export const deletePost = async (req, res) => {
+    
+}

@@ -65,3 +65,8 @@ export const getUser = async (req, res) => {
         res.status(500).json({error : 'couldnt get the current user'})
     }
 }
+
+
+export const logout = async (req, res) => {
+    
+}
